@@ -1,0 +1,106 @@
+﻿@page
+@model IndexModel
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@{
+    ViewData["Title"] = "Home page";
+    var user = await UserManager.GetUserAsync(User);
+}
+
+<div class="text-center">
+    <h1 class="display-4">Inköpslista</h1>
+    <div class="row justify-content-center">
+        @if (SignInManager.IsSignedIn(User))
+        {
+            <p>Du är inloggad som: @User.Identity.Name</p>
+
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="border" style="width: 600px">
+                        <div class="mt-4">
+                            @foreach (var groceryItem in Model.GroceryItems)
+                            {
+                                <div class="col-md-4" style="top: 110px">
+                                    <div class="">
+
+                                        @if (groceryItem.Purchased)
+                                        {
+                                            <span style="font-size: 2em; color: green;">
+                                                <a href="?itemPurchasedid=@groceryItem.ID&Purchased=true"><i class="fas fa-check"></i></a>
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span style="font-size: 2em; color: red;">
+                                                <a href="?itemPurchasedid=@groceryItem.ID&Purchased=true"><i class="fas fa-times"></i></a>
+                                            </span>
+                                        }
+                                    </div>
+                                </div>
+                                <div class="row justify-content-center">
+                                    <div class="col-md-4">
+
+                                        @if (user != null && user.Id == groceryItem.UserID)
+                                        {
+                                            <form method="post" asp-page-handler="edit">
+                                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                                <div class="form-group">
+                                                    <label asp-for="GroceryItemEdit.Amount" value="@groceryItem.Amount">Amount</label>
+                                                    <input asp-for="GroceryItemEdit.Amount" value="@groceryItem.Amount" class="form-control" />
+                                                    <input type="hidden" asp-for="GroceryItemEdit.ID" value="@groceryItem.ID" />
+                                                    <input type="hidden" asp-for="GroceryItemEdit.UserID" value="@groceryItem.UserID" />
+                                                    <input type="hidden" asp-for="GroceryItemEdit.Purchased" value="@groceryItem.Purchased" />
+                                                    <span asp-validation-for="GroceryItemEdit.Amount" value="@groceryItem.Amount" class="text-danger"></span>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label asp-for="GroceryItemEdit.Name" value="@groceryItem.Name">Name</label>
+                                                    <input asp-for="GroceryItemEdit.Name" value="@groceryItem.Name" class="form-control" />
+                                                    <span asp-validation-for="GroceryItemEdit.Name" value="@groceryItem.Name" class="text-danger"></span>
+
+                                                </div>
+                                                <button class="btn btn-primary" type="submit">Ändra</button>
+                                                @*<a href="?itemeditid=@groceryItem.ID"> Ändra </a> <span> | </span>*@
+
+                                                <a class="btn btn-danger" href="?itemdeleteid=@groceryItem.ID"> Ta bort </a>
+                                                <hr />
+                                            </form>
+                                        }
+                                        else
+                                        {
+                                            <form>
+                                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                                <div class="form-group">
+                                                    <label asp-for="@groceryItem.Amount" class="control-label"></label>
+                                                    <input asp-for="@groceryItem.Amount" class="form-control" readonly />
+                                                    <span asp-validation-for="@groceryItem.Amount" class="text-danger"></span>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label asp-for="@groceryItem.Name" class="control-label"></label>
+                                                    <input asp-for="@groceryItem.Name" class="form-control" readonly />
+                                                    <span asp-validation-for="@groceryItem.Name" class="text-danger"></span>
+                                                </div>
+                                                <hr />
+                                            </form>
+                                        }
+                                    </div>
+                                </div>
+                                @*@groceryItem.Amount st   @groceryItem.Name*@
+
+                                @*@if (user != null && user.Id == groceryItem.UserID)
+                                    {
+                                        <a href="?itemeditid=@groceryItem.ID" class="btn btn-primary"> Ändra </a> <span> | </span>
+                                        <a href="?itemdeleteid=@groceryItem.ID"> Ta bort </a>
+                                    }*@
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <p>Du är INTE inloggad!</p>
+        }
+    </div>
+
+</div>

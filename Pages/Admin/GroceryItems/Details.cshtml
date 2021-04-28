@@ -1,0 +1,43 @@
+﻿@page
+@model GroceryList.Pages.Admin.GroceryItems.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>GroceryItem</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.GroceryItem.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.GroceryItem.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.GroceryItem.Amount)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.GroceryItem.Amount)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.GroceryItem.Purchased)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.GroceryItem.Purchased)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.GroceryItem.UserID)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.GroceryItem.UserID)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.GroceryItem.ID">Edit</a> |
+    <a asp-page="./Index">Back to List</a>
+</div>
